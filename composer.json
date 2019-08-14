@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Invitereferrals_Loyalty",
+    "type": "magento-module",
+    "license": "GPLv3",
+    "homepage": "",
+    "description": "Refer-a-Friend Marketing Software",
+    "authors": [
+    {
+        "name": "InviteReferrals",
+        "email": "Support@tagnpin.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
