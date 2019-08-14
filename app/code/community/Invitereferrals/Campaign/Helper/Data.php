@@ -69,7 +69,7 @@ class Invitereferrals_Campaign_Helper_Data extends Mage_Core_Helper_Abstract {
 			return;
 		
 		
-		$currency = Mage::app()->getStore()->getCurrentCurrencyCode();
+		
 		//$script = "<script>var apiKey = '".$this->getKey()."';</script>"."\n";
         if (($module == 'checkout' && $controller == 'onestep' && $action == 'success')
             || ($module == 'checkout' && $controller == 'onepage' && $action == 'success')
@@ -82,21 +82,24 @@ class Invitereferrals_Campaign_Helper_Data extends Mage_Core_Helper_Abstract {
             $orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
             $order->loadByIncrementId($orderId);    // Load order details
             $order_total = round($order->getGrandTotal(), 2); // Get grand total
-            $order_coupon = $order->getCouponCode();    // Get coupon used
-            $items = $order->getAllItems(); // Get items info
-            $cartInfo = array();
-            // Convert object to string
-            foreach($items as $item) {
-                $product = Mage::getModel('catalog/product')->load($item->getProductId());
-                $name = $item->getName();
-                $qty = $item->getQtyToInvoice();
-                $cartInfo[] = array('id' => $item->getProductId(), 'name' => $name, 'quantity' => $qty);
-            }
-            $cartInfoString = serialize($cartInfo);
-			$cartInfoString = addcslashes($cartInfoString, "'");
+            //$order_coupon = $order->getCouponCode();    // Get coupon used
+            
+			if(!empty($order->getCustomerName()))
             $order_name = $order->getCustomerName(); // Get customer's name
+			
+			if(!empty($order->getCustomerEmail()))
             $order_email = $order->getCustomerEmail(); // Get customer's email id
+		
+			//print_r($order->getShippingAddress());die;
+			if(is_object($order->getShippingAddress()))
+			{
 			$order_phone = $order->getShippingAddress()->getTelephone();
+			}
+			 else
+			{
+			$order_phone ='';
+			}
+				
                 
             // Call invoiceInvitereferrals function
             $scriptAppend2 = "<img style='position:absolute; visibility:hidden' src='https://www.ref-r.com/campaign/t1/settings?bid_e=".$enckey."&bid=".$brandid."&t=420&event=sale&email=".$order_email."&orderID=".$orderId."&purchaseValue=".$order_total."&fname=".$order_name."&mobile=".$order_phone."' />";
